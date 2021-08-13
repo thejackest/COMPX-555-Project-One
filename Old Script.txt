@@ -1,0 +1,2 @@
+Operational - prints only single lines that match 
+awk 'NR>1 {if(match($0,/ATG[ACGT]+((TA[GA])|(TGA))/, arr)&&(length(arr[0])%3==0))print RLENGTH ,arr[0] | "sort -n -r"}' contig00121.txt  > Test.txt
