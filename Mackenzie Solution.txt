@@ -1,0 +1,28 @@
+Remove contig and make a single line
+awk 'NR>1 {print $0}' contig00121.txt > NoContig.txt
+tr -d '\n' <  NoContig.txt > Data.txt
+
+For loop to run through file and pull every possible Start - Stop
+awk '{for (i = 0; i <= length($0); i++)
+{
+	if(substr($0,i,3)=="ATG")
+	{
+		for(j=i; j <= length($0); j+=3) 
+		{
+			if(substr($0,j,3)=="TGA"||substr($0,j,3)=="TAG"||substr($0,j,3)=="TAA")
+			{
+				if(length(substr($0,i,j-i+3))>6)
+				{
+					print length(substr($0,i,j-i+3)),substr($0,i,j-i+3)
+				}
+			}
+		}
+	}
+}}
+' Data.txt | sort -n > out.txt
+
+awk '{for (i = 0; i <= length($0); i++)
+{
+IF substr($0,i,1)=="A"
+}
+}'
