@@ -1,5 +1,5 @@
 # Remove contig and make data a single continuous line
-awk 'NR>1 {print $0}' contig00121.txt | tr -d '\n' > Data.txt
+awk 'NR>1 {print $0}' contig00121.txt | tr -d '\n' > Sequence.txt
 
 
 # For loop to run through file to find a start, then a second loop to find an end, when an end is
@@ -7,25 +7,26 @@ awk 'NR>1 {print $0}' contig00121.txt | tr -d '\n' > Data.txt
 #outputs with length, sorts by length and then cuts length from final file
 awk '{for (i = 0; i <= length($0); i++)
 {
-	if(substr($0,i,3)=="ATG")
+	if(substr($0,i,3) ~ /A[TU]G/)
 	{
 		for(j=i; j <= length($0); j+=3) 
 		{
-			if(substr($0,j,3)=="TGA"||substr($0,j,3)=="TAG"||substr($0,j,3)=="TAA")
+			if(substr($0,j,3) ~ /[UT]GA|[UT]A[GA]/)
 			{
 				if(length(substr($0,i,j-i+3))>6)
 				{
 					print length(substr($0,i,j-i+3)),substr($0,i,j-i+3)
-					#print substr($0,i,j-i+3)
+					break;
 				}
 			}
 		}
 	}
 }}
-' Data.txt | sort -n |sed -E -e 's/^[0-9]+ //' > out.txt
+' Sequence.txt | sort -n |sed -E -e 's/^[0-9]+ //' > PotentialGenes.txt
+#' Complement.txt | sort -n |sed -E -e 's/^[0-9]+ //' > CompPotentialGenes.txt
 
 # Creates complement strand file
-awk '{gsub("A","U");gsub("C","Z");gsub("G","C")gsub("Z","G");gsub("T","A");print}' out.txt > Transcript.txt
+awk '{gsub("A","U");gsub("C","Z");gsub("G","C")gsub("Z","G");gsub("T","A");print}' PotentialGenes.txt > Complement.txt
 
 #Substitutes complements with corresponding amino acids 
 awk '
@@ -35,8 +36,7 @@ awk '
 	{
 		tuple = substr($0,i,3);
 		gsub(/UU[UC]/, "P", tuple);
-		gsub(/UU[AG]/, "L", tuple);#leu
-		gsub(/CU[UCAG]/, "L", tuple);#leu
+		gsub(/UU[AG]|CU[UCAG]/, "L", tuple);#leu
 		gsub(/AU[UCA]/, "I", tuple);
 		gsub(/AUG/,"M", tuple);
 		gsub(/GU[UCAG]/, "V", tuple);
@@ -45,8 +45,7 @@ awk '
 		gsub(/AC[UCAG]/, "T", tuple); #thr
 		gsub(/GC[UCAG]/, "A", tuple); #ala
 		gsub(/UA[UC]/, "T", tuple); #tyr
-		gsub(/UA[AG]/, "", tuple);# stop
-		gsub(/UGA/, "", tuple);# stop
+		gsub(/UA[AG]|UGA/, "", tuple);# stop
 		gsub(/CA[UC]/, "H", tuple);
 		gsub(/CA[AG]/, "G", tuple); #gln
 		gsub(/AA[UC]/, "A", tuple); #asn
@@ -55,8 +54,7 @@ awk '
 		gsub(/GA[AG]/, "G", tuple); #glu
 		gsub(/UG[UC]/, "C", tuple);
 		gsub(/UGG/, "T", tuple); #trp
-		gsub(/CG[UCAG]/, "A", tuple); #arg
-		gsub(/AG[AG]/, "A", tuple); #arg
+		gsub(/CG[UCAG]|AG[AG]/, "A", tuple); #arg
 		gsub(/AG[UC]/, "S", tuple);
 		gsub(/GG[UCAG]/, "G", tuple);
 		if (tuple != "")
@@ -65,4 +63,5 @@ awk '
 		}
 	}
 	print out
-}' Transcript.txt > aminoAcids.txt
+}' CompPotentialGenes.txt > aminoAcids.txt
+
