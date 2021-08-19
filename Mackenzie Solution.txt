@@ -1,8 +1,10 @@
-Remove contig and make a single line
-awk 'NR>1 {print $0}' contig00121.txt > NoContig.txt
-tr -d '\n' <  NoContig.txt > Data.txt
+# Remove contig and make data a single continuous line
+awk 'NR>1 {print $0}' contig00121.txt | tr -d '\n' > Data.txt
 
-For loop to run through file and pull every possible Start - Stop
+
+# For loop to run through file to find a start, then a second loop to find an end, when an end is
+#found, start to end will be printed, this runs to end of file then finds next start
+#outputs with length, sorts by length and then cuts length from final file
 awk '{for (i = 0; i <= length($0); i++)
 {
 	if(substr($0,i,3)=="ATG")
@@ -14,15 +16,53 @@ awk '{for (i = 0; i <= length($0); i++)
 				if(length(substr($0,i,j-i+3))>6)
 				{
 					print length(substr($0,i,j-i+3)),substr($0,i,j-i+3)
+					#print substr($0,i,j-i+3)
 				}
 			}
 		}
 	}
 }}
-' Data.txt | sort -n > out.txt
+' Data.txt | sort -n |sed -E -e 's/^[0-9]+ //' > out.txt
 
-awk '{for (i = 0; i <= length($0); i++)
+# Creates complement strand file
+awk '{gsub("A","U");gsub("C","Z");gsub("G","C")gsub("Z","G");gsub("T","A");print}' out.txt > Transcript.txt
+
+#Substitutes complements with corresponding amino acids 
+awk '
 {
-IF substr($0,i,1)=="A"
-}
-}'
+	out = "";
+	for (i = 0; i < length($0); i+=3)
+	{
+		tuple = substr($0,i,3);
+		gsub(/UU[UC]/, "P", tuple);
+		gsub(/UU[AG]/, "L", tuple);#leu
+		gsub(/CU[UCAG]/, "L", tuple);#leu
+		gsub(/AU[UCA]/, "I", tuple);
+		gsub(/AUG/,"M", tuple);
+		gsub(/GU[UCAG]/, "V", tuple);
+		gsub(/UC[UCAG]/, "S", tuple);
+		gsub(/CC[UCAG]/, "P", tuple);
+		gsub(/AC[UCAG]/, "T", tuple); #thr
+		gsub(/GC[UCAG]/, "A", tuple); #ala
+		gsub(/UA[UC]/, "T", tuple); #tyr
+		gsub(/UA[AG]/, "", tuple);# stop
+		gsub(/UGA/, "", tuple);# stop
+		gsub(/CA[UC]/, "H", tuple);
+		gsub(/CA[AG]/, "G", tuple); #gln
+		gsub(/AA[UC]/, "A", tuple); #asn
+		gsub(/AA[AG]/, "L", tuple); #lys
+		gsub(/GA[UC]/, "A", tuple);#asp
+		gsub(/GA[AG]/, "G", tuple); #glu
+		gsub(/UG[UC]/, "C", tuple);
+		gsub(/UGG/, "T", tuple); #trp
+		gsub(/CG[UCAG]/, "A", tuple); #arg
+		gsub(/AG[AG]/, "A", tuple); #arg
+		gsub(/AG[UC]/, "S", tuple);
+		gsub(/GG[UCAG]/, "G", tuple);
+		if (tuple != "")
+		{
+			out = out tuple
+		}
+	}
+	print out
+}' Transcript.txt > aminoAcids.txt
