@@ -25,6 +25,8 @@ awk '{for (i = 0; i <= length($0); i++)
 ' Sequence.txt | sort -n |sed -E -e 's/^[0-9]+ //' > PotentialGenes.txt
 #' Complement.txt | sort -n |sed -E -e 's/^[0-9]+ //' > CompPotentialGenes.txt
 
+
+
 # Creates complement strand file
 awk '{gsub("A","U");gsub("C","Z");gsub("G","C")gsub("Z","G");gsub("T","A");print}' PotentialGenes.txt > Complement.txt
 
@@ -35,28 +37,27 @@ awk '
 	for (i = 0; i < length($0); i+=3)
 	{
 		tuple = substr($0,i,3);
-		gsub(/UU[UC]/, "P", tuple);
-		gsub(/UU[AG]|CU[UCAG]/, "L", tuple);#leu
-		gsub(/AU[UCA]/, "I", tuple);
-		gsub(/AUG/,"M", tuple);
-		gsub(/GU[UCAG]/, "V", tuple);
-		gsub(/UC[UCAG]/, "S", tuple);
-		gsub(/CC[UCAG]/, "P", tuple);
-		gsub(/AC[UCAG]/, "T", tuple); #thr
-		gsub(/GC[UCAG]/, "A", tuple); #ala
-		gsub(/UA[UC]/, "T", tuple); #tyr
+		gsub(/UU[UC]/, "F", tuple); #Phenylalanine	
+		gsub(/UU[AG]|CU[UCAG]/, "L", tuple);#Leucine
+		gsub(/AU[UCA]/, "I", tuple); #Isoleucine
+		gsub(/AUG/,"M", tuple); #Methionine
+		gsub(/GU[UCAG]/, "V", tuple); #Valine
+		gsub(/UC[UCAG]|AG[UC]/, "S", tuple); #Serine
+		gsub(/CC[UCAG]/, "P", tuple); #Proline
+		gsub(/AC[UCAG]/, "T", tuple); #Threonine
+		gsub(/GC[UCAG]/, "A", tuple); #alanine
+		gsub(/UA[UC]/, "Y", tuple); #Tyrosine
 		gsub(/UA[AG]|UGA/, "", tuple);# stop
-		gsub(/CA[UC]/, "H", tuple);
-		gsub(/CA[AG]/, "G", tuple); #gln
-		gsub(/AA[UC]/, "A", tuple); #asn
-		gsub(/AA[AG]/, "L", tuple); #lys
-		gsub(/GA[UC]/, "A", tuple);#asp
-		gsub(/GA[AG]/, "G", tuple); #glu
-		gsub(/UG[UC]/, "C", tuple);
-		gsub(/UGG/, "T", tuple); #trp
-		gsub(/CG[UCAG]|AG[AG]/, "A", tuple); #arg
-		gsub(/AG[UC]/, "S", tuple);
-		gsub(/GG[UCAG]/, "G", tuple);
+		gsub(/CA[UC]/, "H", tuple); #Histidine
+		gsub(/CA[AG]/, "Q", tuple); #Glutamine
+		gsub(/AA[UC]/, "N", tuple); #asparagine
+		gsub(/AA[AG]/, "K", tuple); #Lysine
+		gsub(/GA[UC]/, "D", tuple);#aspartic acid
+		gsub(/GA[AG]/, "E", tuple); #Glutamic acid
+		gsub(/UG[UC]/, "C", tuple); #Cysteine
+		gsub(/UGG/, "W", tuple); #Tryptophan
+		gsub(/CG[UCAG]|AG[AG]/, "R", tuple); #arginine
+		gsub(/GG[UCAG]/, "G", tuple); #Glycine
 		if (tuple != "")
 		{
 			out = out tuple
