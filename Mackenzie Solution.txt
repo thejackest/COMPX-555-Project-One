@@ -23,12 +23,12 @@ awk '{for (i = 0; i <= length($0); i++)
 	}
 }}
 ' Sequence.txt | sort -n |sed -E -e 's/^[0-9]+ //' > PotentialGenes.txt
-#' Complement.txt | sort -n |sed -E -e 's/^[0-9]+ //' > CompPotentialGenes.txt
-
-
 
 # Creates complement strand file
-awk '{gsub("A","U");gsub("C","Z");gsub("G","C")gsub("Z","G");gsub("T","A");print}' PotentialGenes.txt > Complement.txt
+awk '{gsub("A","X");gsub("C","Z");gsub("G","C")gsub("Z","G");gsub("T","A");gsub("X","T");print}' PotentialGenes.txt > Complement.txt
+
+#create reverse complement
+awk '{gsub("A","U");gsub("C","Z");gsub("G","C")gsub("Z","G");gsub("T","A");print}' Complement.txt > ReverseComplement.txt
 
 #Substitutes complements with corresponding amino acids 
 awk '
@@ -45,18 +45,18 @@ awk '
 		gsub(/UC[UCAG]|AG[UC]/, "S", tuple); #Serine
 		gsub(/CC[UCAG]/, "P", tuple); #Proline
 		gsub(/AC[UCAG]/, "T", tuple); #Threonine
-		gsub(/GC[UCAG]/, "A", tuple); #alanine
+		gsub(/GC[UCAG]/, "A", tuple); #Alanine
 		gsub(/UA[UC]/, "Y", tuple); #Tyrosine
 		gsub(/UA[AG]|UGA/, "", tuple);# stop
 		gsub(/CA[UC]/, "H", tuple); #Histidine
 		gsub(/CA[AG]/, "Q", tuple); #Glutamine
-		gsub(/AA[UC]/, "N", tuple); #asparagine
+		gsub(/AA[UC]/, "N", tuple); #Asparagine
 		gsub(/AA[AG]/, "K", tuple); #Lysine
 		gsub(/GA[UC]/, "D", tuple);#aspartic acid
 		gsub(/GA[AG]/, "E", tuple); #Glutamic acid
 		gsub(/UG[UC]/, "C", tuple); #Cysteine
 		gsub(/UGG/, "W", tuple); #Tryptophan
-		gsub(/CG[UCAG]|AG[AG]/, "R", tuple); #arginine
+		gsub(/CG[UCAG]|AG[AG]/, "R", tuple); #Arginine
 		gsub(/GG[UCAG]/, "G", tuple); #Glycine
 		if (tuple != "")
 		{
@@ -64,5 +64,5 @@ awk '
 		}
 	}
 	print out
-}' CompPotentialGenes.txt > aminoAcids.txt
+}' ReverseComplement.txt > aminoAcids.txt
 
