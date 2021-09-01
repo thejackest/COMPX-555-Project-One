@@ -1,6 +1,8 @@
 # COMPX-555-Project-One
 Team Blue
+
 Mackenzie Harcourt - 1230689
+
 Jackest Gong - 1286514
 
 ExtractSequence takes an contig file entry and outputs sequence.txt
