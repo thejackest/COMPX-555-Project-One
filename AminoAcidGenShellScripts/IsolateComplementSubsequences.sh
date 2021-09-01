@@ -16,4 +16,4 @@ awk '{for (i = 0; i <= length($0); i++)
 		}
 	}
 }}
-' $1 | sort -n |sed -E -e 's/^[0-9]+ //' > subsequences.txt
+' $1 | sort -r -n |sed -E -e 's/^[0-9]+ //' > subsequences.txt
