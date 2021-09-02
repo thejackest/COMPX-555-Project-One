@@ -25,7 +25,7 @@ TranslateGenes takes a sortedsubsequences file input and outputs an aminoAcids.t
 	e.g. ./TranslateGenes.sh sortedsubsequences.txt
 	
 MergeGenesAmino takes a subsequences file and aminoacids file and outputs pairs with a new line inbetween as MergedGenesAcids.txt
-	e.g. ./MergeGenesAmino.sh subsequences.txt aminoAcids.txt
+	e.g. ./MergeGenesAmino.sh sortedsubsequences.txt aminoAcids.txt
 	
 RunFindAminoAcids takes a contig file input and runs all steps with their respective inputs, outputting them all as it goes
 	e.g. ./RunFindAminoAcids.sh contig00028.txt
