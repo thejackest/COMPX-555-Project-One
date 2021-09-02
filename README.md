@@ -5,6 +5,7 @@ Mackenzie Harcourt - 1230689
 
 Jackest Gong - 1286514
 
+#How to use the shell scripts
 ExtractSequence takes an contig file entry and outputs sequence.txt
 	e.g. ./ExtractSequence.sh contig00028.txt
 	
@@ -28,3 +29,15 @@ MergeGenesAmino takes a subsequences file and aminoacids file and outputs pairs 
 	
 RunFindAminoAcids takes a contig file input and runs all steps with their respective inputs, outputting them all as it goes
 	e.g. ./RunFindAminoAcids.sh contig00028.txt
+
+
+#Issues Found in blasting
+Up until the last few days, we hadnt realised that the TranslateGenes shell script was slightly wrong which was causing our
+amino acid sequences to match to very few, or very bad values e-score wise. This turned out to be due to awk incrementing
+incorrectly in for loops starting at 0 instead of 1.
+
+The description of what the final file should contain we interperated as the proteins found in order of best fit to worst followed
+by the highest e-score most identical amino acid sequence and its respective gene. This however meant that most of our final results
+are based on the same best fit amino acid chain due to this chain scoring the best match of e-score and percent identical for multiple
+proteins. We considered having one amino acid sequence match to one protein however this caused our results to contain missleading 
+scoring.
