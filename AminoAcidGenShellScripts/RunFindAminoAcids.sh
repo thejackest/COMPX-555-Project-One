@@ -1,2 +1,2 @@
 #!/bin/bash
-./ExtractSequence.sh $1 && ./IsolateSubsequences.sh sequence.txt && ./GenerateReverseComplement.sh subsequences.txt && ./IsolateComplementSubsequences.sh reverseComplements.txt && ./TranslateGenes.sh subsequences.txt
+./ExtractSequence.sh $1 && ./IsolateSubsequences.sh sequence.txt && ./GenerateReverseComplement.sh subsequences.txt && ./IsolateComplementSubsequences.sh reverseComplements.txt && ./SortSequences.sh subsequences.txt && ./TranslateGenes.sh sortedsubsequences.txt

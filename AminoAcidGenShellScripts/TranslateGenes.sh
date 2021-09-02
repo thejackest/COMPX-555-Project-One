@@ -2,7 +2,7 @@
 awk '
 {
 	out = "";
-	for (i = 0; i < length($0); i+=3)
+	for (i = 1; i < length($0); i+=3)
 	{
 		tuple = substr($0,i,3);
 		gsub(/TT[TC]/, "F", tuple); #Phenylalanine	

@@ -15,8 +15,14 @@ GenerateReverseComplement takes a subsequences input and outputs a reverseComple
 IsolateComplementSubsequences takes a reverseComplements input and adds found subsequences to subsequences.txt
 	e.g. ./IsolateComplementSubsequences.sh reverseComplements.txt
 	
-TranslateGenes takes a subsequences file input and outputs an aminoAcids.txt
-	e.g. ./TranslateGenes.sh subsequences.txt
+SortSequences takes a sunbsequences file and sorts it from largest to smallest, this is outputted as sortedsubsequences.txt
+	e.g. ./SortSequences subsequences.txt
+	
+TranslateGenes takes a sortedsubsequences file input and outputs an aminoAcids.txt
+	e.g. ./TranslateGenes.sh sortedsubsequences.txt
+	
+MergeGenesAmino takes a subsequences file and aminoacids file and outputs pairs with a new line inbetween as MergedGenesAcids.txt
+	e.g. ./MergeGenesAmino.sh subsequences.txt aminoAcids.txt
 	
 RunFindAminoAcids takes a contig file input and runs all steps with their respective inputs, outputting them all as it goes
 	e.g. ./RunFindAminoAcids.sh contig00028.txt

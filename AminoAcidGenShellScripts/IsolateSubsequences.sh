@@ -1,5 +1,5 @@
 #!/bin/bash
-awk '{for (i = 0; i <= length($0); i++)
+awk '{for (i = 1; i <= length($0); i++)
 {
 	if(substr($0,i,3) ~ /ATG/)
 	{
