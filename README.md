@@ -41,3 +41,6 @@ by the highest e-score most identical amino acid sequence and its respective gen
 are based on the same best fit amino acid chain due to this chain scoring the best match of e-score and percent identical for multiple
 proteins. We considered having one amino acid sequence match to one protein however this caused our results to contain missleading 
 scoring.
+
+We were unsure of what was meant by blast score so we put the max score, total score and e-value in our final results as they all
+appear useful in their own rights
